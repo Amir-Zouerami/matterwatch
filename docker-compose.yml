@@ -1,0 +1,22 @@
+services:
+    matterwatch:
+        build:
+            context: .
+            target: prod
+        image: matterwatch:local
+        init: true
+        restart: unless-stopped
+        env_file: .env
+        ports:
+            - '127.0.0.1:3000:3000' # put your reverse proxy in front; see docs/setup.md
+        volumes:
+            - matterwatch-data:/data
+        mem_limit: 256m
+        logging:
+            driver: json-file
+            options:
+                max-size: 50m
+                max-file: '3'
+
+volumes:
+    matterwatch-data:

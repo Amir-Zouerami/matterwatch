@@ -1,0 +1,39 @@
+{
+    "name": "matterwatch",
+    "version": "1.0.0",
+    "type": "module",
+    "description": "👀 Readable GitLab updates for Mattermost: living cards, failed-job logs and one-click retry and merge.",
+    "engines": {
+        "node": ">=24"
+    },
+    "scripts": {
+        "start": "node src/index.ts",
+        "dev": "node --watch src/index.ts",
+        "typecheck": "tsc --noEmit",
+        "test": "node --test --test-reporter=spec \"test/**/*.test.ts\"",
+        "webhooks:sync": "node scripts/sync-webhooks.ts"
+    },
+    "dependencies": {
+        "@hono/node-server": "2.1.8",
+        "hono": "4.13.18",
+        "zod": "4.6.7"
+    },
+    "devDependencies": {
+        "@types/node": "^24.0.0",
+        "typescript": "5.9.3"
+    },
+    "license": "MIT",
+    "keywords": [
+        "mattermost",
+        "gitlab",
+        "notifications",
+        "webhook",
+        "chatops",
+        "bot"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Amir-Zouerami/matterwatch.git"
+    },
+    "homepage": "https://github.com/Amir-Zouerami/matterwatch"
+}
