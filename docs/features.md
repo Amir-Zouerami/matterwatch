@@ -13,7 +13,7 @@ Every behaviour is a switch that can be flipped live, with no restart. Resolutio
 HTTP alternative (from the server / docker network only — `/admin` is **not** exposed publicly):
 
 ```sh
-docker exec matterwatch wget -qO- --header "Authorization: Bearer $ADMIN_TOKEN" http://127.0.0.1:3000/admin/features
+docker compose exec matterwatch wget -qO- --header "Authorization: Bearer $ADMIN_TOKEN" http://127.0.0.1:3000/admin/features
 ```
 
 
@@ -35,7 +35,7 @@ docker exec matterwatch wget -qO- --header "Authorization: Bearer $ADMIN_TOKEN" 
 | `cards.mr_ci_status` | on | Keep the pipeline line and merge button of an open MR card in sync with its latest pipeline |
 | `cards.reactions` | on | Add status reactions to MR cards (approved, merged, closed) |
 | `cards.conventional_commits` | on | Parse type(scope): subject titles into tags |
-| `cards.jalali_dates` | on | Show Persian (Jalali) calendar dates instead of Gregorian |
+| `cards.jalali_dates` | off | Show Persian (Jalali) calendar dates instead of Gregorian |
 
 **people**
 

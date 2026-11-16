@@ -33,6 +33,8 @@ curl localhost:3000/healthz   # {"ok":true}
 
 The SQLite database lives in the `matterwatch-data` volume. Run **one** instance only.
 
+**Networking.** `MM_URL` must be reachable from the Matterwatch container, and `SERVICE_URL` from Mattermost. If Mattermost runs in another Docker Compose project, join its network (see the commented `networks` lines in `docker-compose.yml`) and use service names, e.g. `MM_URL=http://mattermost:8065` and `SERVICE_URL=http://matterwatch:3000`. Otherwise use the hosts' real addresses.
+
 ## 5. Expose the webhook (and only the webhook)
 
 GitLab must reach Matterwatch over HTTPS. Proxy these paths to port 3000 and nothing else:
@@ -64,6 +66,8 @@ HOOK_URL=https://matterwatch.example.com/hooks/gitlab \
 node scripts/sync-webhooks.ts my-group --dry-run
 ```
 
+The script is included in the image, so you can also run it from the container: `docker compose exec matterwatch node scripts/sync-webhooks.ts my-group --dry-run` (it reads `GITLAB_TOKEN` and `GITLAB_WEBHOOK_SECRET` from `.env`; pass `HOOK_URL` with `-e`).
+
 ## 7. Link your people
 
 Everyone runs `/gl link <gitlab-username>` once. Matterwatch also links by matching e-mail or an identical username; `/gl unlinked` lists the GitLab users it has seen but could not match (admins fix them with `/gl link <gitlab-user> @mattermost-user`).
@@ -72,7 +76,7 @@ Everyone runs `/gl link <gitlab-username>` once. Matterwatch also links by match
 
 | Symptom | Fix |
 |---|---|
-| Nothing posted | Project → *Settings → Webhooks → Recent events*: 401 = secret mismatch, 5xx = Matterwatch is down. Then `docker compose logs bridge`. |
+| Nothing posted | Project → *Settings → Webhooks → Recent events*: 401 = secret mismatch, 5xx = Matterwatch is down. Then `docker compose logs matterwatch`. |
 | Buttons / `/gl` fail with an invalid-URL error | Step 2 (allow untrusted internal connections), or `SERVICE_URL` is not reachable from Mattermost. |
 | A pasted link is ignored | The bot is not in that channel, `links.watch_mr` is off there, or the link's host differs from `GITLAB_URL`. |
 | GitLab calls fail with 401/403/404 | Token expired, wrong scope, or the project is outside the token's group. |

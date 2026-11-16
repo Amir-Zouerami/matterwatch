@@ -12,6 +12,8 @@ services:
         volumes:
             - matterwatch-data:/data
         mem_limit: 256m
+        # Mattermost runs in another compose project? Join its network so MM_URL / SERVICE_URL can use service names:
+        # networks: [default, mattermost]
         logging:
             driver: json-file
             options:
@@ -20,3 +22,8 @@ services:
 
 volumes:
     matterwatch-data:
+
+# networks:
+#     mattermost:
+#         name: <the network your Mattermost container is on>
+#         external: true

@@ -16,14 +16,17 @@ The official Mattermost GitLab plugin posts one message for every event, so a bu
 
 ```
 ❌ Pipeline #2310304 failed on MR !822 — @alice
-┌──────────────┬────────────────────────────────────────────┐
-│ Project      │ acme/shop-frontend                         │
-│ Branch       │ feat/hero → main                           │
-│ Author       │ @alice            Triggered by  @bob       │
-│ Jobs         │ ✅ build  ✅ lint  ❌ unit-tests  ⏭ deploy │
-└──────────────┴────────────────────────────────────────────┘
+┌─────────────────┬───────────────────────────────────────────────┐
+│ Project         │ acme/shop-frontend                            │
+│ Merge request   │ !822 feat(hero): add hero section             │
+│ Author          │ @alice                                        │
+│ Duration        │ 2m 5s                                         │
+└─────────────────┴───────────────────────────────────────────────┘
+Failed: unit-tests
+  test   unit-tests   ❌ failed    1m 0s
+  build  build        ✅ success   40s
   [ 🔁 Retry ]  [ 🔎 Show logs ]
-  └─ thread: last 40 lines of `unit-tests`, secrets masked, full log attached
+  └─ reply: last 40 lines of `unit-tests`, secrets masked, full log attached
 ```
 
 ## Why you might want it

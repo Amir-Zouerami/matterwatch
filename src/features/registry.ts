@@ -29,7 +29,7 @@ export const FEATURES: FeatureDef[] = [
     f('cards.mr_ci_status', 'cards', 'Keep the pipeline line and merge button of an open MR card in sync with its latest pipeline'),
     f('cards.reactions', 'cards', 'Add status reactions to MR cards (approved, merged, closed)'),
     f('cards.conventional_commits', 'cards', 'Parse type(scope): subject titles into tags'),
-    f('cards.jalali_dates', 'cards', 'Show Persian (Jalali) calendar dates on cards instead of Gregorian'),
+    f('cards.jalali_dates', 'cards', 'Show Persian (Jalali) calendar dates on cards instead of Gregorian', false),
 
     // People
     f('mentions.channel', 'people', 'Mention relevant people (author, reviewers, assignees) in channel cards'),
