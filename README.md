@@ -93,7 +93,7 @@ Mattermost ──websocket──▶ link detector        Mattermost ──button
 
 ```sh
 npm ci
-npm run typecheck && npm test     # 59 tests: fakes for Mattermost and GitLab
+npm run typecheck && npm test     # 61 tests: fakes for Mattermost and GitLab
 node --env-file=.env src/index.ts
 ```
 

@@ -84,7 +84,8 @@ const MR_ACTION_VERB: Record<string, string> = {
 export function renderMrCard(v: MrView, opts: RenderOpts, btns: ButtonSpec[], mentions: boolean): OutPost & { channel_id: '' } {
     const st = mrStyle(v.state, v.draft);
     const t = titleLine(v.title, opts);
-    const verb = (v.action && MR_ACTION_VERB[v.action]) || 'updated';
+    // No webhook action (the card was refreshed from the API): describe the MR by its state instead of a bare "updated".
+    const verb = (v.action && MR_ACTION_VERB[v.action]) || (v.state === 'opened' || v.state === 'merged' || v.state === 'closed' ? v.state : 'updated');
     const who = v.actor ? ` by ${mentions ? v.actor.mention : v.actor.gitlab}` : '';
     const ping = mentions ? [...v.reviewers, ...v.assignees].filter((p) => p.mention.startsWith('@')).map((p) => p.mention) : [];
     const pingText = ping.length ? `\n${[...new Set(ping)].join(' ')} — your review is requested` : '';

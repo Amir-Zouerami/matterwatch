@@ -321,3 +321,20 @@ test('Show logs includes allow_failure jobs that failed (pipeline green, one all
     assert.match(p.message, /allowed failure output/);
     assert.equal(p.root_id, 'card');
 });
+
+test('a refreshed open MR card still says "opened", not "updated"', async () => {
+    const { app, mm } = makeApp();
+    await send(app, { object_kind: 'merge_request', user: { username: 'alice.dev', name: 'Alice' }, project: PROJECT, object_attributes: { iid: 822, title: 't', state: 'opened', action: 'open', url: `${PROJECT.web_url}/-/merge_requests/822`, source_branch: 'feat/hero', target_branch: 'master', created_at: '2026-11-14 07:00:00 UTC', updated_at: '2026-11-14 07:00:00 UTC' } });
+    await send(app, pipelineEvent({ id: 100, status: 'failed' }));
+    const card = mm.inChannel(UPDATES).find((p) => p.message.includes('Merge request'))!;
+    assert.match(card.message, /Merge request .*!822.* opened/);
+    assert.doesNotMatch(card.message, /updated/);
+});
+
+test('/gl me reports DM types that are switched off globally as off', async () => {
+    const { app } = makeApp();
+    linkAlice(app);
+    const r = await handleSlash(app, { user_id: 'u_alice', user_name: 'alice', channel_id: GENERAL, text: 'me' });
+    assert.match(r.text, /Comment DMs \| off \(disabled by an admin\)/);
+    assert.match(r.text, /Pipeline DMs \| on/);
+});

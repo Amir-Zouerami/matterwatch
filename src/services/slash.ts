@@ -85,8 +85,22 @@ function me(app: App, req: SlashRequest): SlashResponse {
     const u = app.users.byMm(req.user_id);
     if (!u) return eph('You are not linked yet. Use `/gl link <your-gitlab-username>`.');
     const p = u.prefs;
-    const on = (v: boolean | undefined) => (v === false ? 'off' : 'on');
-    return eph(`Linked to GitLab user **${u.gitlab_username}** (${u.source}).\n\n${table(['Setting', 'Value'], [['Pipeline DMs', on(p.dmPipelines)], ['Failures only', p.failuresOnly ? 'on' : 'off'], ['Review DMs', on(p.dmReviews)], ['Comment DMs', on(p.dmComments)], ['MR state DMs', on(p.dmState)], ['Quiet hours', on(p.quietHours)]])}`);
+    // A DM type that is switched off globally is off no matter what the personal preference says.
+    const dm = (pref: boolean | undefined, feature: string) =>
+        !app.features.isEnabled(feature, { userId: req.user_id }) ? 'off (disabled by an admin)' : pref === false ? 'off' : 'on';
+    return eph(
+        `Linked to GitLab user **${u.gitlab_username}** (${u.source}).\n\n${table(
+            ['Setting', 'Value'],
+            [
+                ['Pipeline DMs', dm(p.dmPipelines, 'dm.pipeline_result')],
+                ['Failures only', p.failuresOnly ? 'on' : 'off'],
+                ['Review DMs', dm(p.dmReviews, 'dm.reviewer_assigned')],
+                ['Comment DMs', dm(p.dmComments, 'dm.mr_comment')],
+                ['MR state DMs', dm(p.dmState, 'dm.mr_state')],
+                ['Quiet hours', dm(p.quietHours, 'dm.quiet_hours')],
+            ],
+        )}`,
+    );
 }
 
 async function doLink(app: App, req: SlashRequest, rest: string[]): Promise<SlashResponse> {
